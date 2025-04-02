@@ -1,0 +1,278 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sirishaallarapu/POC-/blob/main/Dataset\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "BQYl6__6JAsa",
+        "outputId": "8be4014d-a7ea-4e64-e6f7-62778f587a58"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting faker\n",
+            "  Downloading faker-37.1.0-py3-none-any.whl.metadata (15 kB)\n",
+            "Requirement already satisfied: pandas in /usr/local/lib/python3.11/dist-packages (2.2.2)\n",
+            "Requirement already satisfied: tzdata in /usr/local/lib/python3.11/dist-packages (from faker) (2025.2)\n",
+            "Requirement already satisfied: numpy>=1.23.2 in /usr/local/lib/python3.11/dist-packages (from pandas) (2.0.2)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.11/dist-packages (from pandas) (2.8.2)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.11/dist-packages (from pandas) (2025.2)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.8.2->pandas) (1.17.0)\n",
+            "Downloading faker-37.1.0-py3-none-any.whl (1.9 MB)\n",
+            "\u001b[?25l   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m0.0/1.9 MB\u001b[0m \u001b[31m?\u001b[0m eta \u001b[36m-:--:--\u001b[0m\r\u001b[2K   \u001b[91m━━━━━━━━━━━━━━━━\u001b[0m\u001b[90m╺\u001b[0m\u001b[90m━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m0.8/1.9 MB\u001b[0m \u001b[31m23.2 MB/s\u001b[0m eta \u001b[36m0:00:01\u001b[0m\r\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.9/1.9 MB\u001b[0m \u001b[31m32.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: faker\n",
+            "Successfully installed faker-37.1.0\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install faker pandas\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "import random\n",
+        "from faker import Faker\n",
+        "fake = Faker()\n",
+        "Faker.seed(42)\n"
+      ],
+      "metadata": {
+        "id": "iAVgcVBuJUEa"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "income_levels = [\"80k\", \"150k\", \">150k\"]\n",
+        "segments = [\"Families\", \"Teachers\", \"Students\"]\n",
+        "car_models = [\"Tata\", \"Mahindra\", \"Hyundai\", \"Kia\", \"Honda\"]\n",
+        "customers = []\n",
+        "for i in range(1, 101):\n",
+        "    customers.append([\n",
+        "        f\"CUST_{i}\",\n",
+        "        random.randint(18, 65),\n",
+        "        random.choice(income_levels),\n",
+        "        random.choice(segments),\n",
+        "        random.choice(car_models)\n",
+        "    ])\n",
+        "\n",
+        "customer_df = pd.DataFrame(customers, columns=[\"customer_id\", \"age\", \"income_level\", \"segment\", \"custo_preferred_model\"])\n",
+        "customer_df.to_csv(\"customer.csv\", index=False)\n"
+      ],
+      "metadata": {
+        "id": "_zYcoESfJXiX"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "categories = [\"SUV\", \"Sedan\", \"Truck\", \"Coupe\"]\n",
+        "regions = [\"Delhi\", \"Bangalore\", \"Jaipur\", \"Mumbai\"]\n",
+        "sales = []\n",
+        "for i in range(100):\n",
+        "    sales.append([\n",
+        "        fake.random_int(min=1000000, max=9999999),\n",
+        "        random.choice(customer_df[\"customer_id\"].tolist()),\n",
+        "        random.choice(car_models),\n",
+        "        random.choice(categories),\n",
+        "        fake.date_between(start_date=\"-3y\", end_date=\"today\"),\n",
+        "        random.choice(regions),\n",
+        "        round(random.uniform(500000, 2000000), 2)\n",
+        "    ])\n",
+        "sales_df = pd.DataFrame(sales, columns=[\"sales_id\", \"customer_id\", \"model\", \"category\", \"sale_date\", \"region\", \"sales_amount\"])\n",
+        "sales_df.to_csv(\"sales.csv\", index=False)\n"
+      ],
+      "metadata": {
+        "id": "ZJ9GJuOHJhNo"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import pandas as pd\n",
+        "import random\n",
+        "from faker import Faker\n",
+        "\n",
+        "fake = Faker()\n",
+        "\n",
+        "car_models = [\"Tata\", \"Hyundai\", \"Kia\", \"Mahindra\", \"Honda\"]\n",
+        "categories = [\"SUV\", \"Sedan\", \"Coupe\", \"Truck\"]\n",
+        "campaign_modes = [\"Social Media\", \"TV Ad\", \"Radio Ad\", \"News Paper Ad\"]\n",
+        "\n",
+        "post_llm_results = []\n",
+        "for i in range(100):\n",
+        "    predicted_model = random.choice(car_models)\n",
+        "    actual_model = random.choice(car_models)\n",
+        "    predicted_revenue = round(random.uniform(500000, 2000000), 2)\n",
+        "    actual_revenue = round(predicted_revenue * random.uniform(0.8, 1.2), 2)  # Adding some variation\n",
+        "\n",
+        "    post_llm_results.append([\n",
+        "        fake.random_int(min=1000000, max=9999999),\n",
+        "        f\"CAMP_{random.randint(1, 20)}\",\n",
+        "        random.choice(campaign_modes),\n",
+        "        random.randint(100, 500),\n",
+        "        predicted_model,\n",
+        "        actual_model,\n",
+        "        random.choice(categories),\n",
+        "        predicted_revenue,\n",
+        "        actual_revenue\n",
+        "    ])\n",
+        "\n",
+        "post_llm_df = pd.DataFrame(post_llm_results, columns=[\n",
+        "    \"result_id\", \"campaign_id\", \"campaign_mode\", \"click_rate\",\n",
+        "    \"predicted_model\", \"actual_model\", \"predicted_category\",\n",
+        "    \"predicted_revenue\", \"actual_revenue\"\n",
+        "])\n",
+        "post_llm_df.to_csv(\"post_llm_result.csv\", index=False)\n",
+        "\n"
+      ],
+      "metadata": {
+        "id": "LnYYzP_oJzMP"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(\"Customer Data:\\n\", customer_df.head(), \"\\n\")\n",
+        "print(\"Sales Data:\\n\", sales_df.head(), \"\\n\")\n",
+        "print(\"Post LLM Result Data:\\n\", post_llm_df.head(), \"\\n\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "dS53KnTPMj9d",
+        "outputId": "fdf81b3c-a33e-47a5-9416-5af967872e00"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Customer Data:\n",
+            "   customer_id  age income_level   segment custo_preferred_model\n",
+            "0      CUST_1   55        >150k  Students                   Kia\n",
+            "1      CUST_2   44          80k  Families               Hyundai\n",
+            "2      CUST_3   41        >150k  Teachers                  Tata\n",
+            "3      CUST_4   23         150k  Teachers                   Kia\n",
+            "4      CUST_5   31        >150k  Families              Mahindra \n",
+            "\n",
+            "Sales Data:\n",
+            "    sales_id customer_id    model category   sale_date     region  sales_amount\n",
+            "0   2867825     CUST_43  Hyundai      SUV  2022-04-29     Mumbai    1762267.19\n",
+            "1   5614226     CUST_11  Hyundai    Coupe  2022-12-26     Mumbai     970107.07\n",
+            "2   3341057     CUST_53     Tata      SUV  2024-06-17  Bangalore     527172.49\n",
+            "3   2458591     CUST_57      Kia    Coupe  2024-01-09      Delhi     542432.31\n",
+            "4   1533224     CUST_33  Hyundai      SUV  2022-05-04  Bangalore    1553654.63 \n",
+            "\n",
+            "Post LLM Result Data:\n",
+            "    result_id campaign_id  campaign_mode  click_rate predicted_model  \\\n",
+            "0    5673212      CAMP_3  News Paper Ad         285        Mahindra   \n",
+            "1    8761611     CAMP_11   Social Media         201             Kia   \n",
+            "2    5191056     CAMP_16          TV Ad         279             Kia   \n",
+            "3    2264748      CAMP_2       Radio Ad         256         Hyundai   \n",
+            "4    8434500      CAMP_2       Radio Ad         323        Mahindra   \n",
+            "\n",
+            "  actual_model predicted_category  predicted_revenue  actual_revenue  \n",
+            "0      Hyundai              Truck         1430096.23      1342872.30  \n",
+            "1     Mahindra              Coupe          804415.82       750644.54  \n",
+            "2        Honda              Sedan          755287.38       721885.64  \n",
+            "3        Honda              Truck         1493088.81      1710804.35  \n",
+            "4          Kia              Truck         1324239.04      1416944.10   \n",
+            "\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')\n",
+        "\n",
+        "\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "EPqcydZTMwwC",
+        "outputId": "f2cd1daa-82b5-42d7-e046-7710e61c662e"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /content/drive\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "customer_df.to_csv(\"/content/drive/My Drive/customer.csv\", index=False)\n",
+        "sales_df.to_csv(\"/content/drive/My Drive/sales.csv\", index=False)\n",
+        "post_llm_df.to_csv(\"/content/drive/My Drive/post_llm_result.csv\", index=False)\n"
+      ],
+      "metadata": {
+        "id": "bFkazv5fO4YT"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "K89aH7H2O-sA"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
