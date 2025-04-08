@@ -80,56 +80,56 @@ campaign_data
 1.	Input: A business goal (e.g., "Boost SUV sales in South-West")
 2.	Agent Workflow: Managed by LangGraph to process the goal through these stages:
 
-	Agent name                           Responsibility
+Agent Name	Responsibility
+create_campaign_strategy	Creates campaign structure: name, timeline, channels, KPIs, messaging
+generate_content	Crafts content for email, social, and landing pages
+generate_final_report	Compiles all generated assets into a detailed campaign report
+research_market_trends	Uses Tavily + internal data to generate market and trend analysis
+segment_audience	Selects ideal primary and secondary audience segments based on goal and insights
+send_emails	Sends personalized marketing emails to target customers
+simulate_campaign	Predicts campaign performance: reach, engagement, conversions, ROI, risks, etc.
 
-create_campaign_strategy	         Creates campaign structure: name, timeline, channels, KPIs, messaging
-generate_content	                 Crafts content for email, social, and landing pages
-generate_final_report	             Compiles all generated assets into a detailed campaign report
-research_market_trends	             Uses Tavily + internal data to generate market and trend analysis
-segment_audience	                 Selects ideal primary and secondary audience segments based on goal and market insights
-send_emails                        	 Sends personalized marketing emails to target customers using campaign content
-simulate_campaign	                 Predicts campaign performance by estimating reach, engagement, conversions, ROI, risks,         
-                                     and improvements.
 
 3.	Context: Each agent uses relevant data from ChromaDB, powered by semantic search.
 
 
 ## Agent Workflow & Architecture
 The project follows a Goal-to-Campaign Flow powered by LangChain and LangGraph. Each goal is processed through a sequence of intelligent agents, with decisions enhanced by semantic search using ChromaDB and Google embeddings.
-
-   +-------------------------+
-   |  User Campaign Goal     |
-   +-----------+-------------+
-               |
-        [LangGraph Orchestration]
-               |
-+--------------v--------------+
-|       create_strategy Agent |
-+--------------+--------------+
-               |
-+--------------v--------------+
-|     generate_content Agent  | ← Pulls from ChromaDB
-+--------------+--------------+
-               |
-+--------------v--------------+
-|    generate_report Agent    |
-+--------------+--------------+
-               |
-+--------------v--------------+
-|     research_market Agent   |
-+--------------+--------------+
-               |
-+--------------v--------------+
-|    segment_audience Agent   |
-+--------------+--------------+
-               |
-+--------------v--------------+
-|      send_emails Agent      |
-+--------------+--------------+
-               |
-+--------------v--------------+
-|    simulate_campaign Agent  |
-+-----------------------------+
++-------------------------+
+|  User Campaign Goal     |
++-----------+-------------+
+            |
++-----------v------------+
+| LangGraph Orchestration|
++-----------+------------+
+            |
++-----------v-------------------------+
+| create_campaign_strategy Agent      |
++-----------+-------------------------+
+            |
++-----------v-------------------------+
+| generate_content Agent              | ← Pulls data from ChromaDB
++-----------+-------------------------+
+            |
++-----------v-------------------------+
+| generate_final_report Agent         |
++-----------+-------------------------+
+            |
++-----------v-------------------------+
+| research_market_trends Agent        |
++-----------+-------------------------+
+            |
++-----------v-------------------------+
+| segment_audience Agent              |
++-----------+-------------------------+
+            |
++-----------v-------------------------+
+| send_emails Agent                   |
++-----------+-------------------------+
+            |
++-----------v-------------------------+
+| simulate_campaign Agent             |
++-------------------------+-----------+
 
 
 ## Example Use Case
